@@ -2,7 +2,7 @@
 package_name: bike_sharing_model
 
 # Data Files
-training_data_file: bike_sharing-dataset.csv
+training_data_file: bike-sharing-dataset.csv
 test_data_file: test.csv
 
 # Variables
@@ -22,10 +22,8 @@ features:      # final features to be use
   - atemp
   - hum
   - windspeed
-  - registered
-  - cnt
   - yr
-  - month
+  - mnth
 
 
 unused_fields:  # Features to drop before pipeline
@@ -36,7 +34,7 @@ unused_fields:  # Features to drop before pipeline
 
 # Features inside processing pipeline
 
-embarked_var: Embarked  # first imputatation , then --> Mappeing
+weekday_var: weekday  # first imputatation , then --> Mappeing
   
 gender_var: Sex
 
