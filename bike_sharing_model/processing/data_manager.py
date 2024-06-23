@@ -9,7 +9,7 @@ import re
 import joblib
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder
 from bike_sharing_model import __version__ as _version
 from bike_sharing_model.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 
@@ -45,8 +45,6 @@ def impute_weekday(dataframe):
 
     df = dataframe.copy()
     wkday_null_idx = df[df['weekday'].isnull() == True].index
-    #print(type(df.loc[wkday_null_idx, 'dteday']))
-    #print(df.loc[wkday_null_idx, 'dteday'])
     df.loc[wkday_null_idx, 'weekday'] = df.loc[wkday_null_idx, 'dteday'].dt.day_name().apply(lambda x: x[:3])
 
     return df
@@ -90,9 +88,9 @@ def pre_pipeline_preparation(*, df: pd.DataFrame) -> pd.DataFrame:
     
     print('#####',numerical_features)
     
-    for col in numerical_features:
-        print('#######', col)
-        df = handle_outliers(df, col)
+    handler = OutlierHandler(numerical_features,method='iqr', factor=1.5)
+    handler.fit(df)
+    df = handler.transform(df)
         
     df['yr'] = df['yr'].apply(lambda x: yr_mapping[x])
     df['mnth'] = df['mnth'].apply(lambda x: mnth_mapping[x])
