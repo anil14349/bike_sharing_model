@@ -35,30 +35,83 @@ unused_fields:  # Features to drop before pipeline
 # Features inside processing pipeline
 
 weekday_var: weekday  # first imputatation , then --> Mappeing
-  
-gender_var: Sex
+weathersit_var: weathersit
+mnth_var: mnth
+yr_var : yr
+holiday_var : holiday
+workingday_var : workingday
+hr_var : hr
+season_var : season
 
-title_var: Title
+weekday_mappings:
+  Mon: 0
+  Tue: 1
+  Wed: 2
+  Thu: 3
+  Fri: 4
+  Sat: 5
+  Sun: 6
 
-age_var: Age 
+mnth_mapping:
+  January: 0
+  February: 1
+  March: 2
+  April: 3
+  May: 4
+  June: 5
+  July: 6
+  August: 7
+  September: 8
+  October: 9
+  November: 10
+  December: 11
 
-gender_mappings:
-  female: 0
-  male: 1
+season_mapping:
+  spring: 0
+  winter: 1
+  summer: 2
+  fall: 3
 
-embarked_mappings:
-  S: 0
-  C: 1
-  Q: 2
+weathersit_mapping:
+  Heavy Rain: 0
+  Light Rain: 1
+  Mist: 2
+  Clear: 3
 
-title_mappings:
-  Mrs: 4
-  Master: 3
-  Miss: 2
-  Mr: 1
-  Other: 0
+holiday_mapping:
+  yes : 0
+  no : 1
 
-  
+workingday_mapping:
+  No: 0
+  Yes: 1
+
+hr_mapping:
+  4am: 0
+  3am: 1 
+  5am: 2 
+  2am: 3 
+  1am: 4 
+  12am: 5 
+  6am: 6 
+  11pm: 7 
+  10pm: 8
+  10am: 9 
+  9pm: 10 
+  11am: 11 
+  7am: 12 
+  9am: 13 
+  8pm: 14 
+  2pm: 15 
+  1pm: 16 
+  12pm: 17 
+  3pm: 18 
+  4pm: 19 
+  7pm: 20 
+  8am: 21 
+  6pm: 22 
+  5pm: 23
+
 # set train/test split
 test_size: 0.20
 

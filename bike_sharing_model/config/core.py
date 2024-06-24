@@ -42,13 +42,22 @@ class ModelConfig(BaseModel):
     target: str
     features: List[str]
     unused_fields: List[str]
-    embarked_var: str 
-    gender_var:str 
-    title_var:str 
-    age_var: str 
-    gender_mappings: Dict[str, int]
-    embarked_mappings: Dict[str, int]
-    title_mappings: Dict[str, int]
+    weekday_var: str 
+    yr_var : int
+    mnth_var : str
+    season_var: str
+    weathersit_var : str
+    holiday_var : str
+    workingday_var : str
+    hr_var : str
+    weekday_mappings: Dict[str, int]
+    yr_mapping: Dict[int, int]
+    mnth_mapping: Dict[str, int]
+    weathersit_mapping: Dict[str, int]
+    holiday_mapping: Dict[str, int]
+    workingday_mapping: Dict[str, int]
+    hr_mapping: Dict[str, int]
+    season_mapping: Dict[str, int]
   
     test_size:float
     random_state: int

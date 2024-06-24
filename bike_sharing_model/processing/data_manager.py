@@ -5,11 +5,9 @@ parent, root = file.parent, file.parents[1]
 sys.path.append(str(root))
 
 import typing as t
-import re
 import joblib
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
 from bike_sharing_model import __version__ as _version
 from bike_sharing_model.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 
@@ -18,52 +16,15 @@ from bike_sharing_model.config.core import DATASET_DIR, TRAINED_MODEL_DIR, confi
 ##  Pre-Pipeline Preparation
 def get_year_and_month(dataframe):
 
-    df = dataframe.copy()
+    data_frame = dataframe.copy()
     # convert 'dteday' column to Datetime datatype
-    df['dteday'] = pd.to_datetime(df['dteday'], format='%Y-%m-%d')
+    data_frame['dteday'] = pd.to_datetime(data_frame['dteday'], format='%Y-%m-%d')
     # Add new features 'yr' and 'mnth
-    df['yr'] = df['dteday'].dt.year
-    df['mnth'] = df['dteday'].dt.month_name()
+    data_frame['yr'] = data_frame['dteday'].dt.year
+    data_frame['mnth'] = data_frame['dteday'].dt.month_name()
 
-    return df
+    return data_frame
 
-def get_categorical_data(bikeshare,target_col, unused_colms):
-
-    numerical_features = []
-    categorical_features = []
-
-    for col in bikeshare.columns:
-        if col not in unused_colms + [target_col]:
-            if bikeshare[col].dtypes == 'float64':
-                numerical_features.append(col)
-            else:
-                categorical_features.append(col)
-    
-    return numerical_features, categorical_features
-
-def impute_weekday(dataframe):
-
-    df = dataframe.copy()
-    wkday_null_idx = df[df['weekday'].isnull() == True].index
-    df.loc[wkday_null_idx, 'weekday'] = df.loc[wkday_null_idx, 'dteday'].dt.day_name().apply(lambda x: x[:3])
-
-    return df
-
-def handle_outliers(dataframe, colm):
-
-    df = dataframe.copy()
-    q1 = df.describe()[colm].loc['25%']
-    q3 = df.describe()[colm].loc['75%']
-    iqr = q3 - q1
-    lower_bound = q1 - (1.5 * iqr)
-    upper_bound = q3 + (1.5 * iqr)
-    for i in df.index:
-        if df.loc[i,colm] > upper_bound:
-            df.loc[i,colm]= upper_bound
-        if df.loc[i,colm] < lower_bound:
-            df.loc[i,colm]= lower_bound
-
-    return df
     
 # 2. processing cabin
 
@@ -79,35 +40,21 @@ hour_mapping = {'4am': 0, '3am': 1, '5am': 2, '2am': 3, '1am': 4, '12am': 5, '6a
                 '12pm': 17, '3pm': 18, '4pm': 19, '7pm': 20, '8am': 21, '6pm': 22, '5pm': 23}
   
 
-def pre_pipeline_preparation(*, df: pd.DataFrame) -> pd.DataFrame:
-    encoder = OneHotEncoder(sparse_output=False)
-    df = get_year_and_month(df)
-    df = impute_weekday(df)
-    df['weathersit'].fillna('Clear', inplace=True)
-    numerical_features = get_categorical_data(df ,config.model_config.target, config.model_config.unused_fields )[0]
+def pre_pipeline_preparation(*, data_frame: pd.DataFrame) -> pd.DataFrame:
     
-    print('#####',numerical_features)
-    
-    handler = OutlierHandler(numerical_features,method='iqr', factor=1.5)
-    handler.fit(df)
-    df = handler.transform(df)
-        
-    df['yr'] = df['yr'].apply(lambda x: yr_mapping[x])
-    df['mnth'] = df['mnth'].apply(lambda x: mnth_mapping[x])
-    df['season'] = df['season'].apply(lambda x: season_mapping[x])
-    df['weathersit'] = df['weathersit'].apply(lambda x: weather_mapping[x])
-    df['holiday'] = df['holiday'].apply(lambda x: holiday_mapping[x])
-    df['workingday'] = df['workingday'].apply(lambda x: workingday_mapping[x])
-    df['hr'] = df['hr'].apply(lambda x: hour_mapping[x])
-    encoder.fit(df[['weekday']])
-    enc_wkday_features = encoder.get_feature_names_out(['weekday'])
-    encoded_weekday_test = encoder.transform(df[['weekday']])
-    df[enc_wkday_features] = encoded_weekday_test
+    data_frame = get_year_and_month(data_frame)  
+    '''data_frame['yr'] = data_frame['yr'].apply(lambda x: yr_mapping[x])
+    data_frame['mnth'] = data_frame['mnth'].apply(lambda x: mnth_mapping[x])
+    data_frame['season'] = data_frame['season'].apply(lambda x: season_mapping[x])
+    data_frame['weathersit'] = data_frame['weathersit'].apply(lambda x: weather_mapping[x])
+    data_frame['holiday'] = data_frame['holiday'].apply(lambda x: holiday_mapping[x])
+    data_frame['workingday'] = data_frame['workingday'].apply(lambda x: workingday_mapping[x])
+    data_frame['hr'] = data_frame['hr'].apply(lambda x: hour_mapping[x])'''
 
     # drop unnecessary variables
-    df.drop(labels=config.model_config.unused_fields, axis=1, inplace=True)
+    data_frame.drop(labels=config.model_config.unused_fields, axis=1, inplace=True)
 
-    return df
+    return data_frame
 
 
 def _load_raw_dataset(*, file_name: str) -> pd.DataFrame:
@@ -116,7 +63,7 @@ def _load_raw_dataset(*, file_name: str) -> pd.DataFrame:
 
 def load_dataset(*, file_name: str) -> pd.DataFrame:
     dataframe = pd.read_csv(Path(f"{DATASET_DIR}/{file_name}"))
-    transformed = pre_pipeline_preparation(df=dataframe)
+    transformed = pre_pipeline_preparation(data_frame=dataframe)
 
     return transformed
 

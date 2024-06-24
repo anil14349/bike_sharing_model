@@ -125,6 +125,6 @@ class WeekdayOneHotEncoder(BaseEstimator, TransformerMixin):
       encoded_df = pd.DataFrame(encoded, columns=self.encoded_columns, index=X.index)
 
       # Drop the original column and concatenate the new one-hot encoded columns
-      X_transformed = X.drop(columns=[self.column_name]).join(encoded_df)
+      #X_transformed = X.drop(columns=[self.column_name]).join(encoded_df)
 
-      return X_transformed
+      return encoded_df

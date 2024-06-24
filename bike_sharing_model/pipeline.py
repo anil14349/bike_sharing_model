@@ -9,17 +9,22 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 
 from bike_sharing_model.config.core import config
-from bike_sharing_model.processing.features import embarkImputer
+from bike_sharing_model.processing.features import WeekdayImputer, OutlierHandler, WeathersitImputer, WeekdayOneHotEncoder
 from bike_sharing_model.processing.features import Mapper
-from bike_sharing_model.processing.features import age_col_tfr
+
 
 titanic_pipe=Pipeline([
     
-    ("embark_imputation", embarkImputer(variables=config.model_config.embarked_var)),
+    ("WeekdayImputer", WeekdayImputer(variables=config.model_config.weekday_var)),
+    ("WeathersitImputer", WeathersitImputer(variables=config.model_config.weathersit_var)),
      ##==========Mapper======##
-     #("map_sex", Mapper(config.model_config.gender_var, config.model_config.gender_mappings)),
-     #("map_embarked", Mapper(config.model_config.embarked_var, config.model_config.embarked_mappings )),
-     #("map_title", Mapper(config.model_config.title_var, config.model_config.title_mappings)),
+     ("map_yr", Mapper(config.model_config.yr_var, config.model_config.yr_mappings)),
+     ("map_mnth", Mapper(config.model_config.mnth_var, config.model_config.mnth_mappings)),
+     ("map_weathersit", Mapper(config.model_config.weathersit_var, config.model_config.weathersit_mappings)),
+     ("map_holiday", Mapper(config.model_config.holiday_var, config.model_config.holiday_mappings)),
+     ("map_workingday", Mapper(config.model_config.workingday_var, config.model_config.workingday_mappings)),
+     ("map_hr", Mapper(config.model_config.hr_var, config.model_config.hr_mappings)),
+     ("map_seacon", Mapper(config.model_config.season_var, config.model_config.season_mappings)),
      # Transformation of age column
      #("age_transform", age_col_tfr(config.model_config.age_var)),
      # scale
