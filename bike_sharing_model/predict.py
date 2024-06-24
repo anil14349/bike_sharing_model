@@ -12,7 +12,6 @@ from bike_sharing_model import __version__ as _version
 from bike_sharing_model.config.core import config
 from bike_sharing_model.pipeline import titanic_pipe
 from bike_sharing_model.processing.data_manager import load_pipeline
-from bike_sharing_model.processing.data_manager import pre_pipeline_preparation
 from bike_sharing_model.processing.validation import validate_inputs
 
 

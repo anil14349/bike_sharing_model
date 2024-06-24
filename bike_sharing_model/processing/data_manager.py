@@ -43,13 +43,13 @@ hour_mapping = {'4am': 0, '3am': 1, '5am': 2, '2am': 3, '1am': 4, '12am': 5, '6a
 def pre_pipeline_preparation(*, data_frame: pd.DataFrame) -> pd.DataFrame:
     
     data_frame = get_year_and_month(data_frame)  
-    '''data_frame['yr'] = data_frame['yr'].apply(lambda x: yr_mapping[x])
+    data_frame['yr'] = data_frame['yr'].apply(lambda x: yr_mapping[x])
     data_frame['mnth'] = data_frame['mnth'].apply(lambda x: mnth_mapping[x])
     data_frame['season'] = data_frame['season'].apply(lambda x: season_mapping[x])
     data_frame['weathersit'] = data_frame['weathersit'].apply(lambda x: weather_mapping[x])
     data_frame['holiday'] = data_frame['holiday'].apply(lambda x: holiday_mapping[x])
     data_frame['workingday'] = data_frame['workingday'].apply(lambda x: workingday_mapping[x])
-    data_frame['hr'] = data_frame['hr'].apply(lambda x: hour_mapping[x])'''
+    data_frame['hr'] = data_frame['hr'].apply(lambda x: hour_mapping[x])
 
     # drop unnecessary variables
     data_frame.drop(labels=config.model_config.unused_fields, axis=1, inplace=True)
