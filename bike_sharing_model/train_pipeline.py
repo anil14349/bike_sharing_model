@@ -7,9 +7,10 @@ sys.path.append(str(root))
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+from math import sqrt
 from bike_sharing_model.config.core import config
-from bike_sharing_model.pipeline import titanic_pipe
+from bike_sharing_model.pipeline import bike_sharing_pipe
 from bike_sharing_model.processing.data_manager import load_dataset, save_pipeline
 
 def run_training() -> None:
@@ -32,12 +33,21 @@ def run_training() -> None:
     )
 
     # Pipeline fitting
-    titanic_pipe.fit(X_train,y_train)
-    y_pred = titanic_pipe.predict(X_test)
-    print("Accuracy(in %):", accuracy_score(y_test, y_pred)*100)
+    bike_sharing_pipe.fit(X_train,y_train)
+    y_pred = bike_sharing_pipe.predict(X_test)
+    #print("Accuracy(in %):", accuracy_score(y_test, y_pred)*100) # for classification not for regression
+    
+    # Regression metrics
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = sqrt(mse)
+    mae = mean_absolute_error(y_test, y_pred)
+    
+    print(f"Mean Squared Error (MSE): {mse}")
+    print(f"Root Mean Squared Error (RMSE): {rmse}")
+    print(f"Mean Absolute Error (MAE): {mae}")
 
     # persist trained model
-    save_pipeline(pipeline_to_persist= titanic_pipe)
+    save_pipeline(pipeline_to_persist= bike_sharing_pipe)
     # printing the score
     
 if __name__ == "__main__":

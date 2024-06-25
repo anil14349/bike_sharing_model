@@ -24,12 +24,14 @@ features:      # final features to be use
   - windspeed
   - yr
   - mnth
+  - weathersit
+  - dteday
 
 
 unused_fields:  # Features to drop before pipeline
-  - dteday
   - casual
   - registered
+
 
 
 # Features inside processing pipeline
@@ -43,7 +45,11 @@ workingday_var : workingday
 hr_var : hr
 season_var : season
 
-weekday_mappings:
+yr_mapping:
+  2011: 0
+  2012: 1
+
+weekday_mapping:
   Mon: 0
   Tue: 1
   Wed: 2
@@ -79,8 +85,8 @@ weathersit_mapping:
   Clear: 3
 
 holiday_mapping:
-  yes : 0
-  no : 1
+  Yes : 0
+  No : 1
 
 workingday_mapping:
   No: 0

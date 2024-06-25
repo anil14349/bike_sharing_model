@@ -10,7 +10,8 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from bike_sharing_model import __version__ as _version
 from bike_sharing_model.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
-
+from bike_sharing_model.processing.features import WeekdayImputer, OutlierHandler, WeathersitImputer, WeekdayOneHotEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 
 ##  Pre-Pipeline Preparation
@@ -26,31 +27,9 @@ def get_year_and_month(dataframe):
     return data_frame
 
     
-# 2. processing cabin
-
-yr_mapping = {2011: 0, 2012: 1}
-mnth_mapping = {'January': 0, 'February': 1, 'December': 2, 'March': 3, 'November': 4, 'April': 5,
-                'October': 6, 'May': 7, 'September': 8, 'June': 9, 'July': 10, 'August': 11}
-season_mapping = {'spring': 0, 'winter': 1, 'summer': 2, 'fall': 3}
-weather_mapping = {'Heavy Rain': 0, 'Light Rain': 1, 'Mist': 2, 'Clear': 3}
-holiday_mapping = {'Yes': 0, 'No': 1}
-workingday_mapping = {'No': 0, 'Yes': 1}
-hour_mapping = {'4am': 0, '3am': 1, '5am': 2, '2am': 3, '1am': 4, '12am': 5, '6am': 6, '11pm': 7, '10pm': 8,
-                '10am': 9, '9pm': 10, '11am': 11, '7am': 12, '9am': 13, '8pm': 14, '2pm': 15, '1pm': 16,
-                '12pm': 17, '3pm': 18, '4pm': 19, '7pm': 20, '8am': 21, '6pm': 22, '5pm': 23}
-  
-
+# 2. processing data
 def pre_pipeline_preparation(*, data_frame: pd.DataFrame) -> pd.DataFrame:
-    
-    data_frame = get_year_and_month(data_frame)  
-    data_frame['yr'] = data_frame['yr'].apply(lambda x: yr_mapping[x])
-    data_frame['mnth'] = data_frame['mnth'].apply(lambda x: mnth_mapping[x])
-    data_frame['season'] = data_frame['season'].apply(lambda x: season_mapping[x])
-    data_frame['weathersit'] = data_frame['weathersit'].apply(lambda x: weather_mapping[x])
-    data_frame['holiday'] = data_frame['holiday'].apply(lambda x: holiday_mapping[x])
-    data_frame['workingday'] = data_frame['workingday'].apply(lambda x: workingday_mapping[x])
-    data_frame['hr'] = data_frame['hr'].apply(lambda x: hour_mapping[x])
-
+    data_frame = get_year_and_month(data_frame)
     # drop unnecessary variables
     data_frame.drop(labels=config.model_config.unused_fields, axis=1, inplace=True)
 
@@ -59,6 +38,7 @@ def pre_pipeline_preparation(*, data_frame: pd.DataFrame) -> pd.DataFrame:
 
 def _load_raw_dataset(*, file_name: str) -> pd.DataFrame:
     dataframe = pd.read_csv(Path(f"{DATASET_DIR}/{file_name}"))
+    assert 'dteday' in dataframe.columns, "dteday column is missing in the dataset"
     return dataframe
 
 def load_dataset(*, file_name: str) -> pd.DataFrame:
@@ -103,3 +83,29 @@ def remove_old_pipelines(*, files_to_keep: t.List[str]) -> None:
     for model_file in TRAINED_MODEL_DIR.iterdir():
         if model_file.name not in do_not_delete:
             model_file.unlink()
+
+
+def handle_outliers(dataframe, colm):
+
+    df = dataframe.copy()
+    q1 = df.describe()[colm].loc['25%']
+    q3 = df.describe()[colm].loc['75%']
+    iqr = q3 - q1
+    lower_bound = q1 - (1.5 * iqr)
+    upper_bound = q3 + (1.5 * iqr)
+    for i in df.index:
+        if df.loc[i,colm] > upper_bound:
+            df.loc[i,colm]= upper_bound
+        if df.loc[i,colm] < lower_bound:
+            df.loc[i,colm]= lower_bound
+
+    return df
+
+
+def impute_weekday(dataframe):
+    df = dataframe.copy()
+    df['dteday'] = pd.to_datetime(df['dteday'], format='%Y-%m-%d')
+    wkday_null_idx = df[df['weekday'].isnull() == True].index
+    df.loc[wkday_null_idx, 'weekday'] = df.loc[wkday_null_idx, 'dteday'].dt.day_name().apply(lambda x: x[:3])
+
+    return df

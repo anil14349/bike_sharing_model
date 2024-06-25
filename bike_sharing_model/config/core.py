@@ -43,14 +43,14 @@ class ModelConfig(BaseModel):
     features: List[str]
     unused_fields: List[str]
     weekday_var: str 
-    yr_var : int
+    yr_var : str
     mnth_var : str
     season_var: str
     weathersit_var : str
     holiday_var : str
     workingday_var : str
     hr_var : str
-    weekday_mappings: Dict[str, int]
+    weekday_mapping: Dict[str, int]
     yr_mapping: Dict[int, int]
     mnth_mapping: Dict[str, int]
     weathersit_mapping: Dict[str, int]
