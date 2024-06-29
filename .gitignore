@@ -13,3 +13,16 @@ bike_sharing_model/__pycache__/predict.cpython-311.pyc
 tests/__pycache__/conftest.cpython-311-pytest-8.2.2.pyc
 tests/__pycache__/test_features.cpython-311-pytest-8.2.2.pyc
 tests/__pycache__/test_predictions.cpython-311-pytest-8.2.2.pyc
+*.pyc
+tests/__pycache__/TestNewPredection.cpython-311-pytest-7.4.4.pyc
+*.pyc
+tests/__pycache__/conftest.cpython-311-pytest-7.4.4.pyc
+tests/__pycache__/test_features.cpython-311-pytest-7.4.4.pyc
+tests/__pycache__/test_predictions.cpython-311-pytest-7.4.4.pyc
+bike_sharing_model/trained_models/bike_sharing__model_output_v0.0.1.pkl
+bike_sharing_model.egg-info/dependency_links.txt
+bike_sharing_model.egg-info/PKG-INFO
+bike_sharing_model.egg-info/requires.txt
+bike_sharing_model.egg-info/SOURCES.txt
+bike_sharing_model.egg-info/top_level.txt
+dist/bike_sharing_model-0.0.1-py3-none-any.whl

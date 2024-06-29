@@ -4,11 +4,13 @@ file = Path(__file__).resolve()
 parent, root = file.parent, file.parents[1]
 sys.path.append(str(root))
 
+import pytest
 from sklearn.model_selection import train_test_split
 
 from bike_sharing_model.config.core import config
 from bike_sharing_model.processing.data_manager import _load_raw_dataset
 
+@pytest.fixture
 def sample_input_data():
     data = _load_raw_dataset(file_name=config.app_config.training_data_file)
 

@@ -17,6 +17,9 @@ class WeekdayImputer(BaseEstimator, TransformerMixin):
         df = data_frame.copy()
         #print(' In WeekdayImputer ',df.head())
         wkday_null_idx = df[df['weekday'].isnull() == True].index
+
+        df['dteday'] = pd.to_datetime(df['dteday'], format='%Y-%m-%d')
+        print(df['dteday'])
         df.loc[wkday_null_idx, 'weekday'] = df.loc[wkday_null_idx, 'dteday'].dt.day_name().apply(lambda x: x[:3])
         df = df.drop(columns='dteday')
         return df
