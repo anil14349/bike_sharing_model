@@ -55,14 +55,14 @@ def test_mapper():
 # Test WeekdayOneHotEncoder
 def test_weekday_one_hot_encoder():
     df = pd.DataFrame({
-        'weekday': ['Mon', 'Tue', 'Wed', 'Mon']
+        'weekday': ['Mon', 'Tue', 'Wed', 'Thu']
     })
     encoder = WeekdayOneHotEncoder(column_name='weekday')
     result = encoder.fit_transform(df)
     
     assert 'weekday' not in result.columns
-    assert set(result.columns) == {'weekday_Mon', 'weekday_Tue', 'weekday_Wed'}
-    assert result['weekday_Mon'].tolist() == [1, 0, 0, 1]
+    assert set(result.columns) == {'weekday_Mon', 'weekday_Tue', 'weekday_Wed' , 'weekday_Thu'}
+    assert result['weekday_Mon'].tolist() == [1, 0, 0, 0]
     assert result['weekday_Tue'].tolist() == [0, 1, 0, 0]
     assert result['weekday_Wed'].tolist() == [0, 0, 1, 0]
 
