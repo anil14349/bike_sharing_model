@@ -1,2 +1,15 @@
 /.DS_Store
 /.venv
+bike_sharing_model/__pycache__/__init__.cpython-311.pyc
+bike_sharing_model/__pycache__/pipeline.cpython-311.pyc
+bike_sharing_model/config/__pycache__/__init__.cpython-311.pyc
+bike_sharing_model/config/__pycache__/core.cpython-311.pyc
+bike_sharing_model/processing/__pycache__/__init__.cpython-311.pyc
+bike_sharing_model/processing/__pycache__/data_manager.cpython-311.pyc
+bike_sharing_model/processing/__pycache__/features.cpython-311.pyc
+bike_sharing_model/processing/__pycache__/validation.cpython-311.pyc
+bike_sharing_model/.DS_Store
+bike_sharing_model/__pycache__/predict.cpython-311.pyc
+tests/__pycache__/conftest.cpython-311-pytest-8.2.2.pyc
+tests/__pycache__/test_features.cpython-311-pytest-8.2.2.pyc
+tests/__pycache__/test_predictions.cpython-311-pytest-8.2.2.pyc

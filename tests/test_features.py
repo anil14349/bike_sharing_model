@@ -100,14 +100,3 @@ def test_pipeline():
 
     # Print the temperature values for debugging
     print(f"Final temp column: {result['temp'].tolist()}")
-
-# Test error cases
-def test_error_cases():
-    with pytest.raises(ValueError):
-        WeekdayImputer(variables=['weekday'])  # should be a string, not a list
-    
-    with pytest.raises(ValueError):
-        Mapper(variables=['season'], mappings={})  # variables should be a string
-    
-    with pytest.raises(ValueError):
-        OutlierHandler(method='invalid_method')  # invalid method

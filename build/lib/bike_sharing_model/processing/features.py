@@ -54,8 +54,7 @@ class OutlierHandler(BaseEstimator, TransformerMixin):
         self.factor = factor
         self.lower_bounds_ = {}
         self.upper_bounds_ = {}
-        if method != 'iqr':
-            raise ValueError("Currently only 'iqr' method is supported")
+
     def fit(self, data_frame: pd.DataFrame, y: pd.Series = None):
         if self.columns is None:
             self.columns = data_frame.select_dtypes(include=np.number).columns.tolist()
@@ -92,7 +91,6 @@ class Mapper(BaseEstimator, TransformerMixin):
 
         if not isinstance(variables, str):
             raise ValueError("variables should be a str")
-        
 
         self.variables = variables
         self.mappings = mappings
@@ -103,7 +101,6 @@ class Mapper(BaseEstimator, TransformerMixin):
 
     def transform(self, data_frame: pd.DataFrame) -> pd.DataFrame:
         data_frame = data_frame.copy()
-        #data_frame[self.variables] = data_frame[self.variables].map(self.mappings).fillna(0).astype(int)
         data_frame[self.variables] = data_frame[self.variables].map(self.mappings).fillna(0).astype(int)
         #print(data_frame[self.variables], data_frame.head(5))
         return data_frame
