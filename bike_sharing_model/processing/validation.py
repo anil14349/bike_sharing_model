@@ -21,6 +21,8 @@ def validate_inputs(*, input_df: pd.DataFrame) -> Tuple[pd.DataFrame, Optional[d
     pre_processed = pre_pipeline_preparation(data_frame = input_df)
     validated_data = pre_processed[config.model_config.features].copy()
     errors = None
+    # Ensure dteday is a string
+    validated_data['dteday'] = validated_data['dteday'].astype(str)
 
     try:
         # replace numpy nans so that pydantic can validate
@@ -46,7 +48,7 @@ class DataInputSchema(BaseModel):
     yr: Optional[int]
     mnth: Optional[str]
     weathersit: Optional[str]
-    #dteday: Optional[str]
+    dteday: Optional[str]
 
 
 class MultipleDataInputs(BaseModel):

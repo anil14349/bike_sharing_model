@@ -30,6 +30,7 @@ def get_year_and_month(dataframe):
 # 2. processing data
 def pre_pipeline_preparation(*, data_frame: pd.DataFrame) -> pd.DataFrame:
     data_frame = get_year_and_month(data_frame)
+    data_frame['dteday'] = data_frame['dteday'].dt.strftime('%Y-%m-%d')
     # drop unnecessary variables
     data_frame.drop(labels=config.model_config.unused_fields, axis=1, inplace=True)
 
