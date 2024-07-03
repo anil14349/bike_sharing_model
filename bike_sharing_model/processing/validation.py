@@ -49,6 +49,8 @@ class DataInputSchema(BaseModel):
     mnth: Optional[str]
     weathersit: Optional[str]
     dteday: Optional[str]
+    casual: Optional[str]
+    registered: Optional[str]
 
 
 class MultipleDataInputs(BaseModel):
